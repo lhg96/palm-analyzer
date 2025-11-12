@@ -26,16 +26,8 @@ OpenCV와 머신러닝을 활용한 실시간 손금 분석 웹 서비스입니�
 ## 📸 스크린샷
 
 ### 메인 인터페이스
-![메인 화면](screenshots/main-interface.png)
+![메인 화면](screenshots/mainboard.png)
 
-### 카메라 촬영 기능
-![카메라 촬영](screenshots/camera-capture.png)
-
-### 손금 분석 결과
-![분석 결과](screenshots/analysis-result.png)
-
-### 상세 통계
-![상세 통계](screenshots/detailed-stats.png)
 
 ## 주요 기능
 
