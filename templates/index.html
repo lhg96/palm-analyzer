@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>손금 분석 서비스 - Palm Analyzer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hand-paper me-2"></i>
+                Palm Analyzer
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="#about">서비스 소개</a>
+                <a class="nav-link" href="#how-to-use">사용방법</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- 헤더 섹션 -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 mb-3">AI 손금 분석 서비스</h1>
+            <p class="lead">카메라로 손바닥을 촬영하여 손금을 자동으로 분석해보세요</p>
+        </div>
+
+        <!-- 메인 기능 섹션 -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-camera me-2"></i>
+                            손바닥 촬영
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- 카메라 미리보기 -->
+                        <div id="camera-section">
+                            <video id="camera-preview" autoplay playsinline class="w-100 mb-3" style="max-height: 400px; background: #f8f9fa; border-radius: 8px;"></video>
+                            <canvas id="capture-canvas" style="display: none;"></canvas>
+                            
+                            <div class="d-flex gap-2 mb-3">
+                                <button id="start-camera" class="btn btn-success flex-fill">
+                                    <i class="fas fa-video me-2"></i>카메라 시작
+                                </button>
+                                <button id="capture-photo" class="btn btn-primary flex-fill" disabled>
+                                    <i class="fas fa-camera me-2"></i>사진 촬영
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 파일 업로드 -->
+                        <div class="border-top pt-3">
+                            <h6 class="mb-3">또는 이미지 파일 업로드</h6>
+                            <form id="upload-form" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <input type="file" id="image-upload" name="image" class="form-control" accept="image/*">
+                                </div>
+                                <button type="submit" id="upload-btn" class="btn btn-outline-primary w-100">
+                                    <i class="fas fa-upload me-2"></i>이미지 분석하기
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- 촬영된 이미지 미리보기 -->
+                        <div id="captured-preview" style="display: none;" class="mt-3">
+                            <h6>촬영된 이미지</h6>
+                            <img id="captured-image" class="img-fluid rounded mb-3" alt="Captured image">
+                            <button id="analyze-captured" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>손금 분석하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-chart-line me-2"></i>
+                            분석 결과
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="analysis-result">
+                            <div class="text-center text-muted py-5">
+                                <i class="fas fa-hand-paper fa-3x mb-3 opacity-50"></i>
+                                <p>손바닥 이미지를 업로드하거나 촬영하여<br>분석을 시작하세요</p>
+                            </div>
+                        </div>
+
+                        <!-- 로딩 인디케이터 -->
+                        <div id="loading-indicator" style="display: none;" class="text-center py-5">
+                            <div class="spinner-border text-primary mb-3" role="status">
+                                <span class="visually-hidden">분석 중...</span>
+                            </div>
+                            <p>손금을 분석하고 있습니다...<br>잠시만 기다려주세요.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 서비스 소개 섹션 -->
+        <section id="about" class="mt-5 py-5 bg-light rounded">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h2 class="mb-4">서비스 소개</h2>
+                        <p class="lead">
+                            최첨단 컴퓨터 비전 기술과 머신러닝을 활용하여 손바닥의 선을 자동으로 추출하고 분석합니다.
+                            OpenCV와 고급 이미지 처리 알고리즘을 통해 정확하고 상세한 손금 분석을 제공합니다.
+                        </p>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-eye fa-3x text-primary mb-3"></i>
+                        <h5>정확한 검출</h5>
+                        <p>Canny 엣지 검출과 Hough 변환을 이용한 정밀한 선 추출</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                        <h5>지능형 분류</h5>
+                        <p>머신러닝을 통한 손금의 종류별 자동 분류 및 해석</p>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="fas fa-mobile-alt fa-3x text-primary mb-3"></i>
+                        <h5>실시간 분석</h5>
+                        <p>카메라를 통한 실시간 촬영 및 즉석 분석</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 사용방법 섹션 -->
+        <section id="how-to-use" class="mt-5 py-5">
+            <div class="container">
+                <h2 class="text-center mb-4">사용방법</h2>
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <div class="step-circle mb-3">1</div>
+                        <h5>카메라 시작</h5>
+                        <p>카메라 버튼을 클릭하여 촬영을 시작하거나 이미지 파일을 선택하세요.</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="step-circle mb-3">2</div>
+                        <h5>손바닥 촬영</h5>
+                        <p>손바닥을 카메라에 가까이 대고 선명하게 촬영하세요.</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="step-circle mb-3">3</div>
+                        <h5>분석 시작</h5>
+                        <p>분석 버튼을 클릭하여 AI 손금 분석을 시작하세요.</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="step-circle mb-3">4</div>
+                        <h5>결과 확인</h5>
+                        <p>추출된 손금과 상세한 분석 결과를 확인하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- 푸터 -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; 2025 Palm Analyzer. AI 기반 손금 분석 서비스</p>
+    </footer>
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
