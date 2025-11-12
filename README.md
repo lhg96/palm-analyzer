@@ -9,7 +9,7 @@
 
 **AI-powered palm line analysis web service using OpenCV and machine learning**
 
-OpenCV와 머신러닝을 활용한 실시간 손금 분석 웹 서비스입니다.
+OpenCV와 머신러닝을 활용한 실시간 손금 분석 웹 서비스입니다. mediapipe 를 사용해서 좀더 쉽게 손금을 추출하는것이 좋을것 같고 향후 손금 운명데이터를 벡터 db로 저장하면 좋을것 같습니다. 관심 있으신 분은 연락주세요.
 
 ## 🌟 English Description
 
